@@ -77,13 +77,13 @@
     <script>
         function createDots() {
             const dotsContainer = document.querySelector('.falling-dots');
-            const numDots = 100;
+            const numDots = 150; // Increased number of dots
 
             for (let i = 0; i < numDots; i++) {
                 const dot = document.createElement('div');
                 dot.classList.add('dot');
                 dot.style.left = Math.random() * 100 + 'vw';
-                dot.style.animationDuration = Math.random() * 5 + 5 + 's';
+                dot.style.animationDuration = Math.random() * 3 + 2 + 's'; // Faster falling
                 dotsContainer.appendChild(dot);
             }
         }
