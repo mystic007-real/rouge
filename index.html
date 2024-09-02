@@ -3,97 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proxy Search</title>
+    <title>Rammerhead Proxy</title>
     <style>
         body, html {
-            height: 100%;
             margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: black;
+        }
+        #search-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #121212;
-            color: white;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-        }
-
-        .search-container {
-            position: relative;
-            z-index: 1;
-        }
-
-        .search-box {
-            padding: 10px;
-            width: 300px;
-            border-radius: 25px;
-            border: none;
-            outline: none;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        .falling-dots {
-            position: absolute;
-            width: 100%;
             height: 100%;
+        }
+        #search-box {
+            width: 50%;
+            padding: 15px;
+            font-size: 20px;
+            z-index: 10;
+        }
+        #dots {
+            position: absolute;
             top: 0;
             left: 0;
-            z-index: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
+            z-index: 1;
         }
-
         .dot {
             position: absolute;
-            width: 5px;
-            height: 5px;
             background-color: white;
             border-radius: 50%;
-            opacity: 0.7;
+            opacity: 0.6;
             animation: fall linear infinite;
         }
-
         @keyframes fall {
-            0% {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100%);
-                opacity: 0;
-            }
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
         }
     </style>
 </head>
 <body>
-
-    <div class="search-container">
-        <input type="text" id="search-box" class="search-box" placeholder="Search the web..." autofocus>
+    <div id="search-container">
+        <input type="text" id="search-box" placeholder="Enter your search query" />
     </div>
-    <div class="falling-dots"></div>
+
+    <div id="dots"></div>
 
     <script>
+        // Function to create dots falling in the background
         function createDots() {
-            const dotsContainer = document.querySelector('.falling-dots');
-            const numDots = 150; // Increased number of dots
-
-            for (let i = 0; i < numDots; i++) {
-                const dot = document.createElement('div');
+            const dotsContainer = document.getElementById('dots');
+            for (let i = 0; i < 200; i++) { // Increased the number of dots
+                let dot = document.createElement('div');
                 dot.classList.add('dot');
-                dot.style.left = Math.random() * 100 + 'vw';
-                dot.style.animationDuration = Math.random() * 3 + 2 + 's'; // Faster falling
+                let size = Math.random() * 5 + 3; // Smaller dots
+                dot.style.width = `${size}px`;
+                dot.style.height = `${size}px`;
+                dot.style.left = `${Math.random() * 100}vw`;
+                dot.style.animationDuration = `${Math.random() * 2 + 1}s`; // Faster fall speed
                 dotsContainer.appendChild(dot);
             }
         }
 
+        // Call the createDots function
         createDots();
 
-        document.getElementById('search-box').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const query = this.value;
-                window.location.href = `/search?q=${encodeURIComponent(query)}`;
+        // Function to handle search and proxy the request via Rammerhead
+        document.getElementById('search-box').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                let query = document.getElementById('search-box').value;
+                if (query) {
+                    let proxyUrl = `/go/?url=https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                    window.location.href = proxyUrl;
+                }
             }
         });
     </script>
