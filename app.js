@@ -1,25 +1,15 @@
 const express = require('express');
-const app = express();
 const path = require('path');
+const app = express();
 
-// Serve the HTML file
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+// Serve the static HTML file
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Handle search queries
-app.get('/search', (req, res) => {
-    const query = req.query.q;
-    const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-
-    // Redirect to Ultraviolet with the Google search URL
-    res.redirect(`/uv/service/${Buffer.from(googleUrl).toString('base64')}`);
-});
-
-// Static files for Ultraviolet
-app.use('/uv', express.static(path.join(__dirname, 'uv')));
+// Proxy requests to Rammerhead
+app.use('/go/', require('rammerhead'));
 
 // Start the server
-app.listen(3000, () => {
-    console.log('Proxy running on port 3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });
