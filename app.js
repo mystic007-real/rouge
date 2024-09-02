@@ -1,12 +1,14 @@
 const express = require('express');
+const rammerhead = require('rammerhead');
 const path = require('path');
+
 const app = express();
 
-// Serve the static HTML file
+// Serve static files (like your index.html)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Proxy requests to Rammerhead
-app.use('/go/', require('rammerhead'));
+app.use('/go/', rammerhead());
 
 // Start the server
 const PORT = process.env.PORT || 3000;
