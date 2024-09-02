@@ -3,85 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rammerhead Proxy</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            background-color: black;
-        }
-        #search-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-        }
-        #search-box {
-            width: 50%;
-            padding: 15px;
-            font-size: 20px;
-            z-index: 10;
-        }
-        #dots {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-        }
-        .dot {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: fall linear infinite;
-        }
-        @keyframes fall {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(100vh); }
-        }
-    </style>
+    <title>Chatroom</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="search-container">
-        <input type="text" id="search-box" placeholder="Enter your search query" />
+    <div id="start-page">
+        <h1>Welcome to Chatroom</h1>
+        <input type="text" id="username" placeholder="Enter username">
+        <input type="text" id="chatroom-code" placeholder="Enter chatroom code">
+        <button onclick="createChatroom()">Create Chatroom</button>
+        <button onclick="joinChatroom()">Join Chatroom</button>
     </div>
-
-    <div id="dots"></div>
-
-    <script>
-        // Function to create dots falling in the background
-        function createDots() {
-            const dotsContainer = document.getElementById('dots');
-            for (let i = 0; i < 200; i++) { // Increased the number of dots
-                let dot = document.createElement('div');
-                dot.classList.add('dot');
-                let size = Math.random() * 5 + 3; // Smaller dots
-                dot.style.width = `${size}px`;
-                dot.style.height = `${size}px`;
-                dot.style.left = `${Math.random() * 100}vw`;
-                dot.style.animationDuration = `${Math.random() * 2 + 1}s`; // Faster fall speed
-                dotsContainer.appendChild(dot);
-            }
-        }
-
-        // Call the createDots function
-        createDots();
-
-        // Function to handle search and proxy the request via Rammerhead
-        document.getElementById('search-box').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                let query = document.getElementById('search-box').value;
-                if (query) {
-                    let proxyUrl = `/go/?url=https://www.google.com/search?q=${encodeURIComponent(query)}`;
-                    window.location.href = proxyUrl;
-                }
-            }
-        });
-    </script>
+    <div id="chatroom" style="display: none;">
+        <h2>Chatroom: <span id="chatroom-name"></span></h2>
+        <div id="messages"></div>
+        <input type="text" id="message-input" placeholder="Type a message">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <script src="app.js"></script>
 </body>
 </html>
